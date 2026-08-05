@@ -45,7 +45,7 @@ export default function TransactionsPage() {
   })
   const walletQuery = useWallets(wsId)
 
-  const rows = useMemo(() => data?.data ?? [], [data])
+  const rows = useMemo(() => data?.rows ?? [], [data])
 
   const remove = async (id: string) => {
     if (!wsId) return

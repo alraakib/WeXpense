@@ -84,7 +84,8 @@ export default function WalletsPage() {
       {wallets?.length ? (
         <SimpleGrid cols={{ base: 1, md: 2, lg: 3 }}>
           {wallets.map((w) => {
-            const spentPct = w.balanceMinor === 0 ? 100 : Math.max(0, Math.min(1, w.balanceMinor / Math.max(1, w.initialBalanceMinor)))
+            const initial = Math.max(1, w.initialBalanceMinor)
+            const usedPct = Math.max(0, Math.min(1, (w.initialBalanceMinor - w.balanceMinor) / initial))
             return (
               <Card key={w._id} withBorder shadow="sm" radius="md" p="lg">
                 <Group justify="space-between" mb="xs">
@@ -125,7 +126,7 @@ export default function WalletsPage() {
                       Used
                     </Text>
                     <Text size="xs" fw={600}>
-                      {(spentPct * 100).toFixed(0)}%
+                      {(usedPct * 100).toFixed(0)}%
                     </Text>
                   </Group>
                   <div
@@ -139,7 +140,7 @@ export default function WalletsPage() {
                     <div
                       style={{
                         height: '100%',
-                        width: `${spentPct * 100}%`,
+                        width: `${usedPct * 100}%`,
                         background: 'var(--mantine-color-primary-5)',
                         borderRadius: 99
                       }}

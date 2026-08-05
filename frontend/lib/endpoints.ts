@@ -94,7 +94,7 @@ export interface TransactionQuery {
 
 export const transactionsApi = {
   list: (wsId: string, query: TransactionQuery = {}) =>
-    get<{ data: Transaction[]; total: number; page: number; pages: number }>(
+    get<{ rows: Transaction[]; total: number; page: number; pages: number }>(
       `/api/workspaces/${wsId}/transactions${qs({ limit: 50, ...query })}`
     ),
   get: (wsId: string, id: string) => get<Transaction>(`/api/workspaces/${wsId}/transactions/${id}`),
