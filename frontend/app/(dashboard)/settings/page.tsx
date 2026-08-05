@@ -87,7 +87,7 @@ export default function SettingsPage() {
         baseCurrency: settings.baseCurrency,
         timezone: settings.timezone,
         theme: settings.theme,
-        prefs: settings.notificationPrefs
+        prefs: (settings as unknown as Record<string, unknown>).notifyEmail as NotificationPrefs ?? settings.notificationPrefs ?? { budget: true, goal: true, recurring: true, invite: true, billing: true, system: true }
       })
     }
   }, [settings])
@@ -96,7 +96,7 @@ export default function SettingsPage() {
     <Stack maw={640}>
       <Title order={2}>Settings</Title>
 
-      <Card withBorder shadow="sm" radius="md" p="lg">
+      <Card withBorder radius="md" p="lg">
         <Text fw={600} mb="xs">
           Profile
         </Text>
@@ -154,7 +154,7 @@ export default function SettingsPage() {
         </form>
       </Paper>
 
-      <Card withBorder shadow="sm" radius="md" p="lg" c="red">
+      <Card withBorder radius="md" p="lg" c="red">
         <Text fw={600}>Sign out</Text>
         <Text size="sm" c="dimmed" mb="sm">
           End your session on this device.
