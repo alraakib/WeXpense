@@ -13,3 +13,5 @@ logs/
 .vercel
 *.tsbuildinfo
 uploads/
+
+nginx/certs/
