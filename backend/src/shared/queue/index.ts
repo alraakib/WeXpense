@@ -1,6 +1,6 @@
 import { Queue, Worker } from 'bullmq'
+import Redis from 'ioredis'
 import { getEnv } from '@/env'
-import { getRedis } from '@/shared/db/redis'
 import logger from '@/shared/utils/logger'
 
 type Processor = (payload: Record<string, unknown>) => Promise<void>
@@ -30,17 +30,24 @@ class InlineDriver implements Driver {
 }
 
 class BullMQDriver implements Driver {
-  private queue = new Queue('wexpense', { connection: getRedis() })
+  private connection: Redis
+  private queue: Queue
   private worker: Worker | null = null
 
   constructor() {
+    this.connection = new Redis(getEnv().REDIS_URI, {
+      db: getEnv().REDIS_DB,
+      maxRetriesPerRequest: null,
+      lazyConnect: true
+    })
+    this.queue = new Queue('wexpense', { connection: this.connection })
     this.worker = new Worker(
       'wexpense',
       async (job) => {
         const fn = processors.get(job.name)
         if (fn) await fn(job.data as Record<string, unknown>)
       },
-      { connection: getRedis(), concurrency: 10 }
+      { connection: this.connection, concurrency: 10 }
     )
   }
 
@@ -51,6 +58,7 @@ class BullMQDriver implements Driver {
   async stop(): Promise<void> {
     await this.worker?.close()
     await this.queue.close()
+    this.connection.disconnect()
   }
 }
 
