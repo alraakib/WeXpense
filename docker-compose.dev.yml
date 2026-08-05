@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - '8080:8080'
+    environment:
+      MONGODB_URI: mongodb://localhost:27017/wexpense
+      REDIS_URI: redis://localhost:6379
+      BETTER_AUTH_SECRET: dev-secret-change-me
+      BETTER_AUTH_URL: http://localhost:8080
+      APP_URL: http://localhost:3000
+      QUEUE_DRIVER: bullmq
+    depends_on:
+      - mongo
+      - redis

@@ -1,0 +1,7 @@
+process.env.NODE_ENV = 'test'
+process.env.MONGO_DB = 'wexpense-test'
+process.env.REDIS_DB = '1'
+process.env.QUEUE_DRIVER = 'inline'
+process.env.UPLOAD_DIR = './tmp-test-uploads'
+process.env.BETTER_AUTH_SECRET = 'test-secret-not-used-in-production-0123456789abcd'
+process.env.FAKE_RATES = '1'

@@ -1,0 +1,33 @@
+{
+  "name": "wexpense-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "bun build src/index.ts --outdir ./dist --target bun",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test --parallel=1 --timeout 30000",
+    "test:all": "bun test --parallel=1 --timeout 30000",
+    "seed": "bun run src/scripts/seed.ts"
+  },
+  "dependencies": {
+    "@elysiajs/bearer": "^1.2.5",
+    "@elysiajs/cors": "^1.2.5",
+    "@elysiajs/cron": "^1.2.5",
+    "@elysiajs/swagger": "^1.2.5",
+    "@sinclair/typebox": "^0.34.13",
+    "better-auth": "^1.2.12",
+    "bullmq": "^5.34.0",
+    "elysia": "^1.2.25",
+    "ioredis": "^5.4.1",
+    "mongodb": "^6.12.0",
+    "pino": "^9.5.0",
+    "stripe": "^17.5.0"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.1.14",
+    "typescript": "^5.7.2"
+  }
+}

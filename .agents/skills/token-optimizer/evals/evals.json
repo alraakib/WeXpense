@@ -1,0 +1,70 @@
+{
+  "skill_name": "token-optimizer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Tengo este archivo TypeScript de 814 lineas en monolithic/app.ts. Las sesiones de Claude Code son caras y lentas. Como reduzco tokens?",
+      "expected_output": "Identifies the monolithic file as the main problem, recommends splitting into files of max 150 lines, proposes a concrete split plan, and cites the 18.2% token savings from experiment data.",
+      "files": ["monolithic/app.ts"],
+      "expectations": [
+        "Identifies monolithic/app.ts (814 lines) as the primary source of token waste",
+        "Recommends a maximum of 150 lines per file as the target",
+        "Proposes a concrete split plan with specific file names and responsibilities",
+        "Cites the 18.2% token savings figure from experiment data",
+        "Mentions noise reduction (92% less noise on focused tasks)"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Mi CLAUDE.md tiene 800 lineas con docs API inline, snippets, y toda la arquitectura. Cada interaccion cuesta demasiados tokens.",
+      "expected_output": "Recommends keeping CLAUDE.md under 500 lines, explains lazy loading pattern, and mentions 50-70% reduction potential.",
+      "files": [],
+      "expectations": [
+        "Recommends keeping CLAUDE.md under 500 lines",
+        "Explains the lazy loading pattern (triggers in CLAUDE.md, details in referenced files)",
+        "Mentions 50-70% reduction in token consumption",
+        "Suggests moving API docs and architecture details to separate referenced files",
+        "Recommends running /context to measure current token usage before and after"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Llevo 2 horas con Claude Code, esta lento, respuestas peores. Tengo 15 MCPs conectados. Que hago?",
+      "expected_output": "Recommends /clear or /compact for context reset, limiting MCPs to 10 or fewer, using subagents for verbose tasks, and strategic model selection.",
+      "files": [],
+      "expectations": [
+        "Recommends /clear or /compact to manage accumulated context",
+        "Advises limiting active MCPs to 10 or fewer",
+        "Suggests using subagents (Task tool) for verbose operations",
+        "Mentions strategic model selection (Sonnet for routine, Haiku for simple tasks)",
+        "Explains that each unused MCP still costs tokens in tool descriptions"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Estoy llamando la API de Anthropic directamente desde mi backend en Node. Envio el mismo system prompt de 8K tokens en cada request y los costos se disparan. Como los reduzco?",
+      "expected_output": "Recommends enabling prompt caching with cache_control on the system prompt, explains pricing math (1.25x write, 0.1x reads), warns about cache-breaking pitfalls, and suggests verifying cache_creation_input_tokens.",
+      "files": [],
+      "expectations": [
+        "Recommends enabling prompt caching via cache_control: {type: ephemeral} on the system prompt",
+        "Explains the pricing math (1.25x write cost, 0.1x read cost, pays for itself on second call)",
+        "Warns about cache-breaking patterns (images, timestamps/session IDs before breakpoint, toggling thinking)",
+        "Mentions the minimum token threshold per model (e.g. 2,048 for Sonnet 4.6) and verifying cache_creation_input_tokens in the response",
+        "Points to references/api-optimization-guide.md for full details"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Proceso 10,000 documentos por dia con Claude para clasificarlos. No necesito respuesta en tiempo real. Como reduzco el costo?",
+      "expected_output": "Recommends Batch API (50% off), routing simple classification to Haiku 4.5 instead of Sonnet/Opus, setting effort low or disabling thinking, and combining Batch with prompt caching for stacked savings.",
+      "files": [],
+      "expectations": [
+        "Recommends the Batch API for 50% off on all token prices (since latency tolerance is >24h)",
+        "Suggests routing classification tasks to Haiku 4.5 instead of Sonnet or Opus",
+        "Recommends setting effort: low or disabling extended thinking for simple classification",
+        "Mentions combining Batch API with prompt caching for stacked savings (up to ~95%)",
+        "Suggests constraining output format explicitly (e.g. JSON with specific keys, no explanation) to reduce output tokens"
+      ]
+    }
+  ]
+}
