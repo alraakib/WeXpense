@@ -8,7 +8,7 @@ RUN bun install --frozen-lockfile --production
 FROM base AS release
 COPY --from=install /app/node_modules ./node_modules
 COPY src ./src
-COPY package.json bun.lock ./
+COPY package.json bun.lock tsconfig.json ./
 ENV NODE_ENV=production PORT=8080
 EXPOSE 8080
 CMD ["bun", "run", "src/index.ts"]
