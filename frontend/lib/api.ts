@@ -24,7 +24,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
+export async function api<T>(path: string, init: RequestInit = {}, raw = false): Promise<T> {
   let headers = (init.headers as Record<string, string> | undefined) ?? {}
   let body: BodyInit | undefined = init.body ?? undefined
   if (init.body && typeof init.body === 'object' && !(init.body instanceof FormData)) {
@@ -38,6 +38,10 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   } catch {
     /* non-json */
   }
+  if (raw) {
+    if (!res.ok) throw new ApiError((json as { error?: string } | null)?.error ?? `Request failed (${res.status})`, res.status)
+    return json as T
+  }
   if (!res.ok || !json?.success) {
     throw new ApiError(json?.error ?? `Request failed (${res.status})`, res.status, json?.code)
   }
@@ -49,6 +53,8 @@ export const post = <T>(path: string, body?: unknown, init?: RequestInit) =>
   api<T>(path, { ...init, method: 'POST', body: body as BodyInit })
 export const put = <T>(path: string, body?: unknown) => api<T>(path, { method: 'PUT', body: body as BodyInit })
 export const del = <T>(path: string) => api<T>(path, { method: 'DELETE' })
+export const postRaw = <T>(path: string, body?: unknown) =>
+  api<T>(path, { method: 'POST', body: body as BodyInit }, true)
 
 export function qs(params: Record<string, string | number | boolean | undefined | null>): string {
   const q = Object.entries(params)

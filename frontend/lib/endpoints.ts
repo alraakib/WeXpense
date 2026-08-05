@@ -1,4 +1,4 @@
-import { api, get, post, put, del, qs } from './api'
+import { api, get, post, put, del, qs, postRaw } from './api'
 import type {
   AppNotification,
   Budget,
@@ -22,11 +22,10 @@ import type {
 
 export const authApi = {
   signin: (email: string, password: string) =>
-    post<{ token?: string }>('/api/auth/sign-in/email', { email, password }),
+    postRaw<{ token?: string }>('/api/auth/sign-in/email', { email, password }),
   signup: (email: string, password: string, name: string) =>
-    post<{ token?: string }>('/api/auth/sign-up/email', { email, password, name }),
-  signout: () => post('/api/auth/sign-out'),
-  session: () => get<{ user?: { id: string; email: string; name: string } }>('/api/auth/get-session')
+    postRaw<{ token?: string }>('/api/auth/sign-up/email', { email, password, name }),
+  signout: () => postRaw('/api/auth/sign-out')
 }
 
 export const usersApi = {
