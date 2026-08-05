@@ -1,12 +1,20 @@
 'use client'
 
-import { Card, Group, Paper, Progress, SimpleGrid, Skeleton, Stack, Text, ThemeIcon } from '@mantine/core'
-import { IconTrendingDown, IconTrendingUp, IconWallet, IconPigMoney } from '@tabler/icons-react'
+import {
+  Badge,
+  Group,
+  Paper,
+  Progress,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Table,
+  Text
+} from '@mantine/core'
 import { useAppStore } from '@/lib/store'
 import { useDashboard } from '@/lib/hooks'
 import { StatCard } from '@/components/shared/UI'
 import { fmtMoney, monthKey } from '@/lib/money'
-import TransactionRow from '@/components/transactions/TransactionRow'
 
 export default function DashboardPage() {
   const workspace = useAppStore((s) => s.workspace)
@@ -16,107 +24,122 @@ export default function DashboardPage() {
 
   if (isLoading) return <Skeleton height={240} radius="md" />
 
+  const income = dash?.incomeMinor ?? 0
+  const expense = dash?.expenseMinor ?? 0
+  const savings = dash?.savingsMinor ?? 0
+  const balance = dash?.balanceMinor ?? 0
+  const total = income > 0 ? income : 1
+
   return (
-    <Stack>
-      <Text fw={700} size="xl">
-        Dashboard
-      </Text>
+    <Stack gap="lg">
       <SimpleGrid cols={{ base: 2, lg: 4 }}>
         <StatCard
           label="Balance"
-          value={dash ? fmtMoney(dash.balanceMinor, dash.baseCurrency) : '-'}
-          color="indigo"
+          value={dash ? fmtMoney(balance, dash.baseCurrency) : '-'}
         />
         <StatCard
           label="Income"
-          value={dash ? fmtMoney(dash.incomeMinor, dash.baseCurrency) : '-'}
-          color="green"
+          value={dash ? fmtMoney(income, dash.baseCurrency) : '-'}
           sub="this month"
+          color="success"
+          trend={{ value: `${((income / total) * 100).toFixed(0)}%`, positive: true }}
         />
         <StatCard
           label="Expenses"
-          value={dash ? fmtMoney(dash.expenseMinor, dash.baseCurrency) : '-'}
-          color="red"
+          value={dash ? fmtMoney(expense, dash.baseCurrency) : '-'}
           sub="this month"
+          color="error"
         />
         <StatCard
           label="Saved"
-          value={dash ? fmtMoney(dash.savingsMinor, dash.baseCurrency) : '-'}
-          color="teal"
+          value={dash ? fmtMoney(savings, dash.baseCurrency) : '-'}
           sub="goal contributions"
+          color="success"
         />
       </SimpleGrid>
 
       {dash && (
-        <SimpleGrid cols={{ base: 1, lg: 3 }}>
-          <Paper withBorder p="md" radius="md">
-            <Group justify="space-between" mb="sm">
-              <Text fw={600}>Spending by category</Text>
-              <ThemeIcon variant="light" size="sm">
-                <IconTrendingUp size={16} />
-              </ThemeIcon>
+        <SimpleGrid cols={{ base: 1, lg: 2 }}>
+          <Paper p="lg" radius="md">
+            <Group justify="space-between" mb="md">
+              <Text fw={600} size="lg">
+                Spending by category
+              </Text>
             </Group>
-            <Stack gap="xs">
-              {(dash.byCategory.length ? dash.byCategory : []).map((b) => {
-                const pct = dash.expenseMinor > 0 ? (b.amountMinor / dash.expenseMinor) * 100 : 0
-                return (
-                  <Group key={b.categoryId} justify="space-between">
-                    <Text size="sm">{b.category?.name ?? 'Other'}</Text>
-                    <Group gap="xs">
-                      <Text size="sm" fw={600}>
-                        {fmtMoney(b.amountMinor, dash.baseCurrency)}
-                      </Text>
-                      <Text size="xs" c="dimmed">
-                        {pct.toFixed(0)}%
-                      </Text>
-                    </Group>
-                  </Group>
-                )
-              })}
-              {!dash.byCategory.length && (
-                <Text size="sm" c="dimmed">
-                  No spending this month
-                </Text>
-              )}
-            </Stack>
+            {dash.byCategory.length ? (
+              <Stack gap="sm">
+                {dash.byCategory.map((b) => {
+                  const pct = expense > 0 ? (b.amountMinor / expense) * 100 : 0
+                  return (
+                    <Stack key={b.categoryId} gap={4}>
+                      <Group justify="space-between">
+                        <Text size="sm" fw={500}>
+                          {b.category?.name ?? 'Other'}
+                        </Text>
+                        <Group gap="sm">
+                          <Text size="sm" fw={600}>
+                            {fmtMoney(b.amountMinor, dash.baseCurrency)}
+                          </Text>
+                          <Badge size="sm" variant="light" color="gray">
+                            {pct.toFixed(0)}%
+                          </Badge>
+                        </Group>
+                      </Group>
+                      <Progress
+                        value={pct}
+                        size="xs"
+                        radius="xl"
+                        color={pct > 50 ? 'error' : pct > 25 ? 'warning' : 'success'}
+                      />
+                    </Stack>
+                  )
+                })}
+              </Stack>
+            ) : (
+              <Text size="sm" c="dimmed">
+                No spending this month
+              </Text>
+            )}
           </Paper>
 
-          <Paper withBorder p="md" radius="md">
-            <Text fw={600} mb="sm">
-              Recent activity
-            </Text>
-            <Stack gap={4}>
-              {(dash.recentTransactions ?? []).slice(0, 6).map((t) => (
-                <TransactionRow key={t._id} txn={t} />
-              ))}
-              {!dash.recentTransactions?.length && (
-                <Text size="sm" c="dimmed">
-                  No transactions yet. Press ⌘K to add your first one.
-                </Text>
-              )}
-            </Stack>
-          </Paper>
-
-          <Paper withBorder p="md" radius="md">
-            <Group justify="space-between" mb="sm">
-              <Text fw={600}>Wallets</Text>
-              <IconWallet size={16} />
+          <Paper p="lg" radius="md">
+            <Group justify="space-between" mb="md">
+              <Text fw={600} size="lg">
+                Recent transactions
+              </Text>
             </Group>
-            <Stack gap="xs">
-              {(dash.byWallet ?? []).map((w) => (
-                <Group key={w.walletId} justify="space-between">
-                  <Text size="sm">{w.walletName ?? 'Wallet'}</Text>
-                  <Text size="sm" fw={600}>
-                    {fmtMoney(w.amountMinor, dash.baseCurrency)}
-                  </Text>
-                </Group>
-              ))}
-              {!dash.byWallet?.length && (
-                <Text size="sm" c="dimmed">
-                  No wallets yet
-                </Text>
-              )}
-            </Stack>
+            {dash.recentTransactions?.length ? (
+              <Table striped highlightOnHover>
+                <Table.Thead>
+                  <Table.Tr>
+                    <Table.Th>Category</Table.Th>
+                    <Table.Th ta="right">Amount</Table.Th>
+                  </Table.Tr>
+                </Table.Thead>
+                <Table.Tbody>
+                  {dash.recentTransactions.slice(0, 8).map((t) => (
+                    <Table.Tr key={t._id}>
+                      <Table.Td>
+                        <Text size="sm">{t.categoryId ?? 'Uncategorized'}</Text>
+                      </Table.Td>
+                      <Table.Td ta="right">
+                        <Text
+                          size="sm"
+                          fw={600}
+                          c={t.type === 'expense' ? 'error' : t.type === 'income' ? 'success' : 'dimmed'}
+                        >
+                          {t.type === 'expense' ? '-' : t.type === 'income' ? '+' : ''}{fmtMoney(t.amountMinor, dash.baseCurrency)}
+                        </Text>
+                      </Table.Td>
+                    </Table.Tr>
+                  ))}
+                </Table.Tbody>
+              </Table>
+            ) : (
+              <Text size="sm" c="dimmed">
+                No transactions yet. Press ⌘K to add your first one.
+              </Text>
+            )}
           </Paper>
         </SimpleGrid>
       )}

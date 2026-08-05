@@ -106,20 +106,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Text fw={700} size="lg">
+            <Text fw={700} size="lg" c="primary">
               WeXpense
             </Text>
           </Group>
           <Group gap="xs">
             <Tooltip label="Quick add (⌘K)">
-              <ActionIcon variant="light" onClick={() => useQuickAdd.getState().setOpen(true)}>
+              <ActionIcon variant="subtle" color="gray" onClick={() => useQuickAdd.getState().setOpen(true)}>
                 <IconPlus size={18} />
               </ActionIcon>
             </Tooltip>
             <Menu position="bottom-end" width={320}>
               <Menu.Target>
-                <Indicator inline size={10} offset={4} color="red" disabled={unread === 0}>
-                  <ActionIcon variant="light">
+                <Indicator inline size={10} offset={4} color="error" disabled={unread === 0}>
+                  <ActionIcon variant="subtle" color="gray">
                     <IconBell size={18} />
                   </ActionIcon>
                 </Indicator>
@@ -148,7 +148,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </Menu.Dropdown>
             </Menu>
             <ActionIcon
-              variant="light"
+              variant="subtle"
+              color="gray"
               onClick={() => setColorScheme(scheme === 'light' ? 'dark' : 'light')}
               aria-label="Toggle theme"
             >
@@ -158,7 +159,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <Menu.Target>
                 <UnstyledButton>
                   <Group gap={8}>
-                    <Avatar size="sm" radius="xl" color="indigo" name={user?.name ?? ''} />
+                    <Avatar size="sm" radius="xl" color="primary" name={user?.name ?? ''} />
                     <Text size="sm" visibleFrom="sm">
                       {user?.name ?? ''}
                     </Text>
@@ -173,7 +174,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   Billing
                 </Menu.Item>
                 <Menu.Divider />
-                <Menu.Item color="red" leftSection={<IconLogout size={16} />} onClick={signOut}>
+                <Menu.Item color="error" leftSection={<IconLogout size={16} />} onClick={signOut}>
                   Sign out
                 </Menu.Item>
               </Menu.Dropdown>
@@ -189,7 +190,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <UnstyledButton w="100%">
                 <Group justify="space-between" w="100%">
                   <Group gap="xs">
-                    <Avatar size="sm" radius="sm" color="indigo">
+                    <Avatar size="sm" radius="sm" color="primary">
                       {(workspace?.name ?? 'W').slice(0, 1)}
                     </Avatar>
                     <Text size="sm" fw={600} lineClamp={1}>
@@ -207,7 +208,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Menu.Item
                   key={w._id}
                   onClick={() => setWorkspace(w)}
-                  rightSection={w._id === workspace?._id ? <Badge size="xs">active</Badge> : null}
+                  rightSection={w._id === workspace?._id ? <Badge size="xs" color="primary">active</Badge> : null}
                 >
                   {w.name}
                 </Menu.Item>
@@ -224,6 +225,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             leftSection={<Icon size={18} />}
             active={pathname === href || pathname.startsWith(href + '/')}
             onClick={() => opened && toggle()}
+            color="primary"
           />
         ))}
       </AppShell.Navbar>

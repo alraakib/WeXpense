@@ -15,19 +15,19 @@ import { useState } from 'react'
 
 const theme = createTheme({
   primaryColor: 'primary',
-  primaryShade: { light: 3, dark: 3 },
+  primaryShade: { light: 3, dark: 4 },
   defaultRadius: 'md',
   fontFamily:
     "var(--font-figtree), var(--font-noto-bengali), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
   headings: {
     fontFamily:
       "var(--font-figtree), var(--font-noto-bengali), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    fontWeight: '300',
+    fontWeight: '500',
     sizes: {
-      h1: { fontSize: '2.6rem', lineHeight: '1.03' },
-      h2: { fontSize: '2rem', lineHeight: '1.1' },
-      h3: { fontSize: '1.375rem', lineHeight: '1.1' },
-      h4: { fontSize: '1.25rem', lineHeight: '1.4' }
+      h1: { fontSize: '2.25rem', lineHeight: '1.03' },
+      h2: { fontSize: '1.75rem', lineHeight: '1.1' },
+      h3: { fontSize: '1.25rem', lineHeight: '1.2' },
+      h4: { fontSize: '1.1rem', lineHeight: '1.4' }
     }
   },
   shadows: {
@@ -109,7 +109,63 @@ const theme = createTheme({
       '#324148',
       '#28363b',
       '#1f2b2e'
+    ],
+    dark: [
+      '#c9cdd4',
+      '#a8acb4',
+      '#878c97',
+      '#676c7a',
+      '#464d5d',
+      '#3b4252',
+      '#2e3548',
+      '#232a3a',
+      '#191f2c',
+      '#0f1117'
     ]
+  },
+  components: {
+    AppShell: {
+      styles: {
+        main: {
+          background: 'transparent'
+        },
+        header: {
+          background: 'var(--mantine-color-dark-8)',
+          borderBottom: '1px solid var(--mantine-color-dark-5)'
+        },
+        navbar: {
+          background: 'var(--mantine-color-dark-8)',
+          borderRight: '1px solid var(--mantine-color-dark-5)'
+        }
+      }
+    },
+    NavLink: {
+      styles: {
+        root: {
+          borderRadius: 'var(--mantine-radius-sm)'
+        }
+      }
+    },
+    Paper: {
+      defaultProps: {
+        withBorder: true
+      }
+    },
+    Card: {
+      defaultProps: {
+        withBorder: true
+      }
+    },
+    Table: {
+      styles: {
+        th: {
+          fontWeight: 600,
+          fontSize: '0.75rem',
+          textTransform: 'uppercase' as const,
+          letterSpacing: '0.05em'
+        }
+      }
+    }
   }
 })
 
