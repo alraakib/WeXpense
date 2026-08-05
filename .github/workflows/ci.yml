@@ -57,4 +57,14 @@ jobs:
             cd /var/www/WeXpense
             git pull origin main
             docker compose up -d --build
-            curl -sf http://localhost:8080/api/health || exit 1
+            for i in $(seq 1 30); do
+              if curl -sf http://localhost:8080/api/health; then
+                echo "Backend healthy"
+                exit 0
+              fi
+              echo "Waiting for backend... ($i/30)"
+              sleep 5
+            done
+            echo "Backend failed to start"
+            docker compose logs backend --tail=50
+            exit 1
