@@ -1,4 +1,6 @@
 import { Elysia, t } from 'elysia'
+import { cors } from '@elysiajs/cors'
+import { getEnv } from '@/env'
 import { flagRoutes } from '@/modules/feature-flags/routes'
 import { configRoutes } from '@/modules/config/routes'
 import { notificationRoutes } from '@/modules/notifications/routes'
@@ -29,6 +31,13 @@ export async function buildApp() {
 
   const app = new Elysia({ name: 'wexpense-api' })
     .use(errorHandler)
+    .use(
+      cors({
+        origin: getEnv().APP_URL ?? 'http://localhost:3000',
+        credentials: true,
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+      })
+    )
     .use(rateLimit)
     .use(authPlugin)
     .use(flagRoutes)
