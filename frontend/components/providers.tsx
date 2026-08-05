@@ -6,7 +6,7 @@ import '@mantine/spotlight/styles.css'
 import '@mantine/dates/styles.css'
 import '../app/globals.css'
 
-import { MantineProvider, createTheme } from '@mantine/core'
+import { localStorageColorSchemeManager, MantineProvider, createTheme } from '@mantine/core'
 import { Notifications } from '@mantine/notifications'
 import { ModalsProvider } from '@mantine/modals'
 import { Spotlight } from '@mantine/spotlight'
@@ -130,12 +130,12 @@ const theme = createTheme({
           background: 'transparent'
         },
         header: {
-          background: 'var(--mantine-color-dark-8)',
-          borderBottom: '1px solid var(--mantine-color-dark-5)'
+          background: 'light-dark(var(--mantine-color-white), var(--mantine-color-dark-8))',
+          borderBottom: '1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))'
         },
         navbar: {
-          background: 'var(--mantine-color-dark-8)',
-          borderRight: '1px solid var(--mantine-color-dark-5)'
+          background: 'light-dark(var(--mantine-color-white), var(--mantine-color-dark-8))',
+          borderRight: '1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))'
         }
       }
     },
@@ -178,10 +178,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         }
       })
   )
+  const colorSchemeManager = localStorageColorSchemeManager({ key: 'wexpense-color-scheme' })
 
   return (
     <QueryClientProvider client={qc}>
-      <MantineProvider theme={theme}>
+      <MantineProvider theme={theme} defaultColorScheme="auto" colorSchemeManager={colorSchemeManager}>
         <ModalsProvider>
           <Notifications position="top-right" />
           {children}

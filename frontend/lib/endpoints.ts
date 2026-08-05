@@ -32,11 +32,10 @@ export const usersApi = {
   me: () => get<UserProfile>('/api/users/me'),
   settings: () => get<UserSettings>('/api/users/me/settings'),
   updateSettings: (body: Partial<Omit<UserSettings, '_id' | 'userId'>>) => {
-    const { notificationPrefs, ...rest } = body as Record<string, unknown> & { notificationPrefs?: unknown }
     return api<UserSettings>('/api/users/me/settings', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...rest, notifyEmail: notificationPrefs })
+      body: JSON.stringify(body)
     })
   },
   export: () => get<Record<string, unknown>>('/api/users/export')

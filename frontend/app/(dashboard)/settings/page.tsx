@@ -11,7 +11,8 @@ import {
   Switch,
   Text,
   TextInput,
-  Title
+  Title,
+  useMantineColorScheme
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
@@ -41,6 +42,7 @@ export default function SettingsPage() {
   const router = useRouter()
   const user = useAppStore((s) => s.user)
   const { data: settings, isLoading } = useSettings()
+  const { setColorScheme } = useMantineColorScheme()
   const [saving, setSaving] = useState(false)
 
   const form = useForm<{
@@ -64,8 +66,9 @@ export default function SettingsPage() {
         baseCurrency: values.baseCurrency,
         timezone: values.timezone,
         theme: values.theme,
-        notificationPrefs: values.prefs
+        notifyEmail: values.prefs
       })
+      if (values.theme !== 'system') setColorScheme(values.theme)
       notifications.show({ color: 'green', message: 'Settings saved' })
       qc.invalidateQueries({ queryKey: ['settings'] })
     } catch (e) {
@@ -83,13 +86,23 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (settings) {
+      const prefs = settings.notifyEmail ?? {
+        budget: true,
+        goal: true,
+        recurring: true,
+        invite: true,
+        billing: true,
+        system: true
+      }
       form.setValues({
         baseCurrency: settings.baseCurrency,
         timezone: settings.timezone,
         theme: settings.theme,
-        prefs: (settings as unknown as Record<string, unknown>).notifyEmail as NotificationPrefs ?? settings.notificationPrefs ?? { budget: true, goal: true, recurring: true, invite: true, billing: true, system: true }
+        prefs
       })
+      if (settings.theme !== 'system') setColorScheme(settings.theme)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings])
 
   return (
@@ -159,7 +172,7 @@ export default function SettingsPage() {
         <Text size="sm" c="dimmed" mb="sm">
           End your session on this device.
         </Text>
-        <Button color="red" variant="light" onClick={signOut}>
+        <Button color="error" variant="light" onClick={signOut}>
           Sign out
         </Button>
       </Card>

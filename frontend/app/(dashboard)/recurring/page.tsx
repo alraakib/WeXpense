@@ -142,26 +142,26 @@ export default function RecurringPage() {
                   <Table.Td>
                     <Group gap="xs">
                       <Text size="sm">{fmtDate(r.nextDueDate)}</Text>
-                      {r.isUpcoming && <Badge size="xs" color="orange">soon</Badge>}
+                      {r.isUpcoming && <Badge size="xs" color="warning">soon</Badge>}
                     </Group>
                   </Table.Td>
                   <Table.Td ta="right">
                     <Text fw={600}>{fmtMoney(r.amountMinor, r.currency)}</Text>
                   </Table.Td>
                   <Table.Td ta="center">
-                    <Badge size="xs" color={r.active ? 'green' : 'gray'} variant="light">
+                    <Badge size="xs" color={r.active ? 'success' : 'gray'} variant="light">
                       {r.active ? 'active' : 'inactive'}
                     </Badge>
                   </Table.Td>
                   <Table.Td ta="right">
                     <Group gap={4} justify="flex-end">
                       <Tooltip label="Mark paid">
-                        <ActionIcon color="green" variant="subtle" onClick={() => markPaid(r._id)}>
+                        <ActionIcon color="success" variant="subtle" onClick={() => markPaid(r._id)}>
                           <IconCheck size={16} />
                         </ActionIcon>
                       </Tooltip>
                       <Tooltip label="Delete">
-                        <ActionIcon color="red" variant="subtle" onClick={() => remove(r._id)}>
+                        <ActionIcon color="error" variant="subtle" onClick={() => remove(r._id)}>
                           <IconTrash size={16} />
                         </ActionIcon>
                       </Tooltip>

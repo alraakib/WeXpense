@@ -26,7 +26,7 @@ export interface UserSettings {
   theme: 'light' | 'dark' | 'system'
   timezone: string
   onboardingCompleted: boolean
-  notificationPrefs: NotificationPrefs
+  notifyEmail: NotificationPrefs
 }
 
 export interface NotificationPrefs {

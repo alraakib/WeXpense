@@ -137,7 +137,7 @@ export default function WorkspacePage() {
             {pending.map((m) => (
               <Group key={m._id} justify="space-between">
                 <Group>
-                  <Avatar size="sm" color="indigo" name={m.user?.name ?? '?'} />
+                  <Avatar size="sm" color="primary" name={m.user?.name ?? '?'} />
                   <div>
                     <Text size="sm">{m.user?.name ?? m.user?.email ?? 'Invited member'}</Text>
                     <Text size="xs" c="dimmed">
@@ -147,10 +147,10 @@ export default function WorkspacePage() {
                 </Group>
                 {canManage && (
                   <Group>
-                    <Button size="compact-sm" color="green" onClick={() => approve(m.userId)}>
+                    <Button size="compact-sm" color="success" onClick={() => approve(m.userId)}>
                       Approve
                     </Button>
-                    <Button size="compact-sm" variant="light" color="red" onClick={() => reject(m.userId)}>
+                    <Button size="compact-sm" variant="light" color="error" onClick={() => reject(m.userId)}>
                       Reject
                     </Button>
                   </Group>
@@ -180,7 +180,7 @@ export default function WorkspacePage() {
                   <Table.Tr key={m._id}>
                     <Table.Td>
                       <Group>
-                        <Avatar size="sm" color="indigo" name={m.user?.name ?? '?'} />
+                        <Avatar size="sm" color="primary" name={m.user?.name ?? '?'} />
                         <div>
                           <Text size="sm">{m.user?.name ?? m.user?.email}</Text>
                           <Text size="xs" c="dimmed">
@@ -193,7 +193,7 @@ export default function WorkspacePage() {
                       <Badge variant="light">{ROLE_LABEL[m.role] ?? m.role}</Badge>
                     </Table.Td>
                     <Table.Td>
-                      <Badge size="xs" color="green">
+                      <Badge size="xs" color="success">
                         active
                       </Badge>
                     </Table.Td>
@@ -201,7 +201,7 @@ export default function WorkspacePage() {
                     {canManage && m.role !== 'owner' && (
                       <Table.Td ta="right">
                         <Tooltip label="Remove">
-                          <Button size="compact-xs" variant="subtle" color="red" onClick={() => remove(m.userId)}>
+                          <Button size="compact-xs" variant="subtle" color="error" onClick={() => remove(m.userId)}>
                             Remove
                           </Button>
                         </Tooltip>

@@ -116,7 +116,7 @@ export default function TransactionsPage() {
                 <Table.Tr key={t._id}>
                   <Table.Td style={{ whiteSpace: 'nowrap' }}>{t.date}</Table.Td>
                   <Table.Td>
-                    <Text size="sm" tt="capitalize" c={t.type === 'income' ? 'green' : t.type === 'expense' ? 'red' : undefined}>
+                    <Text size="sm" tt="capitalize" c={t.type === 'income' ? 'success' : t.type === 'expense' ? 'error' : undefined}>
                       {t.type}
                     </Text>
                   </Table.Td>
@@ -126,7 +126,7 @@ export default function TransactionsPage() {
                   </Table.Td>
                   <Table.Td>{t.walletName ?? '—'}</Table.Td>
                   <Table.Td ta="right">
-                    <Text fw={600} c={t.type === 'income' ? 'green' : t.type === 'expense' ? 'red' : undefined}>
+                    <Text fw={600} c={t.type === 'income' ? 'success' : t.type === 'expense' ? 'error' : undefined}>
                       {t.type === 'income' ? '+' : t.type === 'expense' ? '−' : ''}
                       {fmtMoney(t.amountMinor, t.walletCurrency ?? t.currency)}
                     </Text>
@@ -134,7 +134,7 @@ export default function TransactionsPage() {
                   <Table.Td ta="right">
                     <Group gap={4} justify="flex-end">
                       <Tooltip label="Delete">
-                        <ActionIcon color="red" variant="subtle" onClick={() => remove(t._id)}>
+                        <ActionIcon color="error" variant="subtle" onClick={() => remove(t._id)}>
                           <IconTrash size={16} />
                         </ActionIcon>
                       </Tooltip>

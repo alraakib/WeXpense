@@ -4,7 +4,7 @@ import { Button, Input, Modal, NumberInput, Select, SegmentedControl, Stack, Tex
 import { useForm } from '@mantine/form'
 import { notifications } from '@mantine/notifications'
 import { useQueryClient } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { transactionsApi } from '@/lib/endpoints'
 import { useQuickAdd, useAppStore } from '@/lib/store'
 import { useCategories, useWallets } from '@/lib/hooks'
@@ -24,24 +24,30 @@ export default function QuickAdd() {
 
   const form = useForm({
     initialValues: {
-      type: defaultType ?? 'expense',
+      type: 'expense',
       amount: undefined as number | undefined,
       walletId: '',
+      transferToWalletId: '',
       categoryId: '',
       date: new Date().toISOString().slice(0, 10),
       notes: ''
     }
   })
 
+  useEffect(() => {
+    if (open) form.setFieldValue('type', defaultType ?? 'expense')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open])
+
   const submit = async (values: typeof form.values) => {
     if (!wsId) return
     setSaving(true)
     try {
-      const w = wallets.find((x) => x._id === values.walletId)
       await transactionsApi.create(wsId, {
         type: values.type,
         amount: values.amount ?? 0,
         walletId: values.walletId,
+        transferToWalletId: values.type === 'transfer' ? values.transferToWalletId || undefined : undefined,
         categoryId: values.categoryId || undefined,
         date: values.date,
         notes: values.notes || undefined
@@ -50,7 +56,6 @@ export default function QuickAdd() {
       invalidateRefreshKeys(qc, wsId)
       setOpen(false)
       form.reset()
-      form.setValues({ type: defaultType ?? 'expense' })
     } catch (e) {
       notifications.show({ color: 'red', message: (e as Error).message })
     } finally {
@@ -85,6 +90,17 @@ export default function QuickAdd() {
             searchable
             {...form.getInputProps('walletId')}
           />
+          {form.values.type === 'transfer' && (
+            <Select
+              label="To wallet"
+              placeholder="Select destination wallet"
+              data={wallets
+                .filter((w) => w._id !== form.values.walletId)
+                .map((w) => ({ value: w._id, label: `${w.name} (${w.currency})` }))}
+              searchable
+              {...form.getInputProps('transferToWalletId')}
+            />
+          )}
           {form.values.type !== 'transfer' && (
             <Select
               label="Category"

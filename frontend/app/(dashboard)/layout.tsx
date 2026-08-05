@@ -74,11 +74,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       .list()
       .then((ws) => {
         setWorkspaces(ws)
-        if (!workspace && ws[0]) setWorkspace(ws[0] ?? null)
+        const current = useAppStore.getState().workspace
+        const stillExists = current && ws.some((w) => w._id === current._id)
+        if (!current || !stillExists) setWorkspace(ws[0] ?? null)
       })
       .catch(() => {})
     notificationsApi.unread().then(setUnread).catch(() => {})
-  }, [router, setUser, setWorkspace, setWorkspaces, setUnread, workspace])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, setUser, setWorkspace, setWorkspaces, setUnread])
 
   useWebSocket()
 

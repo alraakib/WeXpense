@@ -101,7 +101,7 @@ export default function WalletsPage() {
                       </Button>
                     </Menu.Target>
                     <Menu.Dropdown>
-                      <Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={() => archive(w._id)}>
+                      <Menu.Item color="error" leftSection={<IconTrash size={14} />} onClick={() => archive(w._id)}>
                         Archive
                       </Menu.Item>
                     </Menu.Dropdown>
@@ -114,7 +114,12 @@ export default function WalletsPage() {
                   {w.equivalentMinor != null && `≈ ${fmtMoney(w.equivalentMinor, w.equivalentCurrency ?? workspace?.baseCurrency ?? 'USD')}`}
                   {w.heldMinor > 0 && ` · ${fmtMoney(w.heldMinor, w.currency)} on hold`}
                 </Text>
-                <Paper withBorder p="xs" radius="md" bg="var(--mantine-color-gray-0)">
+                <Paper
+                  withBorder
+                  p="xs"
+                  radius="md"
+                  bg="light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6))"
+                >
                   <Group justify="space-between" mb={4}>
                     <Text size="xs" c="dimmed">
                       Used
@@ -127,7 +132,7 @@ export default function WalletsPage() {
                     style={{
                       height: 6,
                       borderRadius: 99,
-                      background: 'var(--mantine-color-gray-2)',
+                      background: 'light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))',
                       overflow: 'hidden'
                     }}
                   >
@@ -135,7 +140,7 @@ export default function WalletsPage() {
                       style={{
                         height: '100%',
                         width: `${spentPct * 100}%`,
-                        background: 'var(--mantine-color-indigo-5)',
+                        background: 'var(--mantine-color-primary-5)',
                         borderRadius: 99
                       }}
                     />

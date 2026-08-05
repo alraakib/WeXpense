@@ -8,11 +8,11 @@ import { fmtMoney } from '@/lib/money'
 export default function TransactionRow({ txn }: { txn: Transaction }) {
   const icon =
     txn.type === 'income' ? (
-      <IconArrowUpRight size={16} color="var(--mantine-color-green-6)" />
+      <IconArrowUpRight size={16} color="var(--mantine-color-success-6)" />
     ) : txn.type === 'transfer' ? (
       <IconArrowsRightLeft size={16} />
     ) : (
-      <IconArrowDownRight size={16} color="var(--mantine-color-red-6)" />
+      <IconArrowDownRight size={16} color="var(--mantine-color-error-6)" />
     )
 
   const title = txn.category?.name ?? txn.notes ?? (txn.type === 'transfer' ? 'Transfer' : 'Transaction')
@@ -34,7 +34,7 @@ export default function TransactionRow({ txn }: { txn: Transaction }) {
       </Group>
       <Group gap={4} wrap="nowrap">
         {txn.type === 'expense' && <Badge size="xs" color="gray" variant="light">expense</Badge>}
-        <Text size="sm" fw={600} c={txn.type === 'income' ? 'green' : txn.type === 'expense' ? 'red' : undefined} w={90} ta="right" truncate>
+        <Text size="sm" fw={600} c={txn.type === 'income' ? 'success' : txn.type === 'expense' ? 'error' : undefined} w={90} ta="right" truncate>
           {txn.type === 'income' ? '+' : txn.type === 'expense' ? '−' : ''}
           {fmtMoney(txn.amountMinor, txn.walletCurrency ?? txn.currency)}
         </Text>

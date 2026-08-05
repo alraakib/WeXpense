@@ -97,8 +97,8 @@ export default function AnalyticsPage() {
                 <YAxis fontSize={12} />
                 <ReTooltip formatter={(v: number) => fmtMoney(v, dash?.baseCurrency ?? 'USD')} />
                 <Legend />
-                <Bar dataKey="Income" fill="var(--mantine-color-green-5)" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Expenses" fill="var(--mantine-color-red-5)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Income" fill="var(--mantine-color-success-5)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="Expenses" fill="var(--mantine-color-error-5)" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </Paper>
@@ -113,7 +113,7 @@ export default function AnalyticsPage() {
                 <XAxis type="number" fontSize={12} />
                 <YAxis type="category" dataKey="name" width={110} fontSize={12} />
                 <ReTooltip formatter={(v: number) => fmtMoney(v, dash?.baseCurrency ?? 'USD')} />
-                <Bar dataKey="amount" name="Spent" fill="var(--mantine-color-indigo-5)" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="amount" name="Spent" fill="var(--mantine-color-primary-5)" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </Paper>
@@ -128,12 +128,20 @@ export default function AnalyticsPage() {
                   <Text size="sm" style={{ flex: 1 }}>
                     {c.name}
                   </Text>
-                  <div style={{ flex: 2, height: 8, borderRadius: 99, background: 'var(--mantine-color-gray-2)', overflow: 'hidden' }}>
+                  <div
+                    style={{
+                      flex: 2,
+                      height: 8,
+                      borderRadius: 99,
+                      background: 'light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-5))',
+                      overflow: 'hidden'
+                    }}
+                  >
                     <div
                       style={{
                         height: '100%',
                         width: `${c.pct}%`,
-                        background: 'var(--mantine-color-indigo-5)',
+                        background: 'var(--mantine-color-primary-5)',
                         borderRadius: 99
                       }}
                     />

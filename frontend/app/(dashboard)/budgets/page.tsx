@@ -103,19 +103,19 @@ export default function BudgetsPage() {
                       {b.period}
                     </Badge>
                   </Group>
-                  <ActionIcon color="red" variant="subtle" onClick={() => remove(b._id)}>
+                  <ActionIcon color="error" variant="subtle" onClick={() => remove(b._id)}>
                     <IconTrash size={16} />
                   </ActionIcon>
                 </Group>
                 <Group justify="space-between" mb={6}>
-                  <Text fw={700} size="lg" c={over ? 'red' : undefined}>
+                  <Text fw={700} size="lg" c={over ? 'error' : undefined}>
                     {fmtMoney(b.spendMinor ?? 0, b.currency)}
                   </Text>
                   <Text size="sm" c="dimmed">
                     / {fmtMoney(b.amountMinor, b.currency)}
                   </Text>
                 </Group>
-                <Progress value={pct} color={over ? 'red' : pct >= 80 ? 'orange' : 'indigo'} radius="xl" size="sm" />
+                <Progress value={pct} color={over ? 'error' : pct >= 80 ? 'warning' : 'success'} radius="xl" size="sm" />
                 <Text size="xs" c="dimmed" mt="sm">
                   {b.remainingMinor != null && b.remainingMinor >= 0
                     ? `${fmtMoney(b.remainingMinor, b.currency)} remaining`

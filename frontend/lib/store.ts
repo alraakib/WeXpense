@@ -35,5 +35,5 @@ export interface QuickAddDraft {
 
 export const useQuickAdd = create<QuickAddDraft>((set) => ({
   open: false,
-  setOpen: (open, defaultType) => set({ open, defaultType })
+  setOpen: (open, defaultType) => set({ open, defaultType: open ? defaultType : undefined })
 }))

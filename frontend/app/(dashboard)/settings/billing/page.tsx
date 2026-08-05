@@ -83,14 +83,14 @@ export default function BillingPage() {
               shadow={t.highlight ? 'md' : 'sm'}
               radius="md"
               p="lg"
-              style={t.highlight ? { borderColor: 'var(--mantine-color-indigo-4)' } : undefined}
+              style={t.highlight ? { borderColor: 'var(--mantine-color-primary-4)' } : undefined}
             >
               <Group justify="space-between" mb="xs">
                 <Text fw={600} size="lg">
                   {t.name}
                 </Text>
                 {current && (
-                  <Badge color="green" variant="light">
+                  <Badge color="success" variant="light">
                     Current
                   </Badge>
                 )}

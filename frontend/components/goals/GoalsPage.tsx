@@ -121,7 +121,7 @@ export default function GoalsPage() {
               <Card key={g._id} withBorder shadow="sm" radius="md" p="lg">
                 <Group justify="space-between" mb="xs">
                   <Group>
-                    {complete ? <IconTrophy size={18} color="var(--mantine-color-yellow-6)" /> : <IconTarget size={18} />}
+                    {complete ? <IconTrophy size={18} color="var(--mantine-color-warning-4)" /> : <IconTarget size={18} />}
                     <Text fw={600}>{g.name}</Text>
                   </Group>
                   <Menu position="bottom-end" withinPortal>
@@ -139,7 +139,7 @@ export default function GoalsPage() {
                           Mark complete
                         </Menu.Item>
                       )}
-                      <Menu.Item color="red" leftSection={<IconTrash size={14} />} onClick={() => archive(g._id)}>
+                      <Menu.Item color="error" leftSection={<IconTrash size={14} />} onClick={() => archive(g._id)}>
                         Archive
                       </Menu.Item>
                     </Menu.Dropdown>
@@ -162,7 +162,7 @@ export default function GoalsPage() {
                     </Text>
                   )}
                 </Group>
-                <Progress value={pct} color={pct >= 100 ? 'teal' : 'indigo'} radius="xl" size="sm" />
+                <Progress value={pct} color={pct >= 100 ? 'success' : 'primary'} radius="xl" size="sm" />
                 <Text size="xs" c="dimmed" mt="sm">
                   {complete ? 'Completed' : `Saved ${g.contributions?.length ?? 0} contribution(s)`}
                 </Text>
@@ -214,7 +214,7 @@ export default function GoalsPage() {
           This moves the held money to expenses and locks the goal as complete.
         </Text>
         <Group justify="flex-end">
-          <Button color="teal" onClick={complete}>
+          <Button color="success" onClick={complete}>
             Complete goal
           </Button>
         </Group>
