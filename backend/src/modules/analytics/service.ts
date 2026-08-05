@@ -9,6 +9,7 @@ import { WorkspaceRepo } from '@/modules/workspaces/repository'
 import { WalletRepo } from '@/modules/wallets/repository'
 import { CategoryRepo } from '@/modules/categories/repository'
 import { TransactionRepo } from '@/modules/transactions/repository'
+import { TransactionService } from '@/modules/transactions/service'
 import { ConfigService } from '@/modules/config/service'
 
 const CACHE_TTL = 10 * 60
@@ -28,6 +29,7 @@ export class AnalyticsService {
     private wallets = new WalletRepo(),
     private categories = new CategoryRepo(),
     private transactions = new TransactionRepo(),
+    private transactionService = new TransactionService(),
     private config = new ConfigService()
   ) {}
 
@@ -166,11 +168,11 @@ export class AnalyticsService {
     const cached = await cacheGet<DashboardData>(cacheKey)
     if (cached) return cached
 
-    const [workspace, snapshot, wallets, transactions] = await Promise.all([
+    const [workspace, snapshot, wallets, recent] = await Promise.all([
       this.workspaces.findWorkspaceById(workspaceId),
       this.getSnapshot(workspaceId, month),
       this.wallets.list(workspaceId),
-      this.transactions.list({ workspaceId, page: 1, limit: 5 })
+      this.transactionService.list(userId, workspaceId, { page: 1, limit: 5 })
     ])
     const baseCurrency = workspace?.baseCurrency ?? 'USD'
     const rates = await this.config.getRates()
@@ -190,7 +192,7 @@ export class AnalyticsService {
       byCategory: snapshot.byCategory,
       byWallet: snapshot.byWallet,
       trend,
-      recentTransactions: transactions.rows as unknown as Record<string, unknown>[]
+      recentTransactions: recent.rows as unknown as Record<string, unknown>[]
     }
     await cacheSet(cacheKey, data, CACHE_TTL)
     return data
