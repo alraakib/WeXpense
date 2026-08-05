@@ -120,7 +120,9 @@ export default function DashboardPage() {
                   {dash.recentTransactions.slice(0, 8).map((t) => (
                     <Table.Tr key={t._id}>
                       <Table.Td>
-                        <Text size="sm">{t.categoryId ?? 'Uncategorized'}</Text>
+                        <Text size="sm">
+                          {t.type === 'transfer' ? 'Transfer' : t.category?.name ?? 'Uncategorized'}
+                        </Text>
                       </Table.Td>
                       <Table.Td ta="right">
                         <Text
